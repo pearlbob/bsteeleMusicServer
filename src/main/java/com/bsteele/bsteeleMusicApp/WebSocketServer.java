@@ -31,18 +31,13 @@ public class WebSocketServer {
     public void onOpen(final Session session) {
         logger.log(Level.INFO, "onOpen({0}) of {1}", new Object[]{peers.size(), session.getId()});
         peers.add(session);
-
-        //  alert the newbie as to where everyone else is
-        //  gives confirmation of the connection to the app
-        if (lastMessage != null)
-            session.getAsyncRemote().sendText(lastMessage);
     }
 
     @OnMessage
     public void onMessage(final String message, final Session session) {
         if (message == null || message.length() <= 0)
             return;
-        lastMessage = message;
+
 
         //   fixme:  flip any message back to all registered peers
         for (final Session peer : peers) {
@@ -50,10 +45,12 @@ public class WebSocketServer {
                 peer.getAsyncRemote().sendText(message);
         }
 
-        logger.log(Level.FINER, "onMessage(\"{0}...\") to {1} by {2}", new Object[]{
-                message.substring(0, Math.min(message.length(), 40)).replaceAll("\n", " "),
-                peers.size(),
-                Thread.currentThread().getId()});
+        logger.log(Level.INFO, "onMessage(\"{0}\")",
+                new Object[]{
+                        JsonDiff.diff(lastMessage, message).replaceAll("\n", " "),
+                });
+
+        lastMessage = message;
     }
 
     @OnClose
@@ -63,14 +60,14 @@ public class WebSocketServer {
     }
 
     @OnError
-    public void onError(final Session session, Throwable t) {
+    public void onError(final Session session, final Throwable t) {
         logger.log(Level.SEVERE, "onError({0}) from {1}", new Object[]{t.getMessage(), session.getId()});
         //t.printStackTrace();
     }
 
     private static final Logger logger = Logger.getLogger(WebSocketServer.class.getName());
     private static final Set<Session> peers = Collections.synchronizedSet(new HashSet<>());
-    private String lastMessage = null;
+    private String lastMessage = "";
 
     static {
         logger.setLevel(Level.FINE);
