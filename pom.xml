@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+<!--
+    currently set to run on java 18.  be sure the tomcat runs on 18 as well.  affirm the jdk is not a jre!
+    for a war file:
+    mvn clean package
+-->
     <groupId>com.bsteele.bsteeleMusicApp</groupId>
     <artifactId>bsteeleMusicApp</artifactId>
     <version>1.0</version>
