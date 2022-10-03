@@ -5,9 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
 <!--
+
     currently set to run on java 18.  be sure the tomcat runs on 18 as well.  affirm the jdk is not a jre!
     for a war file:
     mvn clean package
+
 -->
     <groupId>com.bsteele.bsteeleMusicApp</groupId>
     <artifactId>bsteeleMusicApp</artifactId>
