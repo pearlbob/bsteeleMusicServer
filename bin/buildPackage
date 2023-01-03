@@ -1,4 +1,4 @@
 #!/bin/tcsh
 #set echo; set verbose
 
-mvn package
+mvn clean package

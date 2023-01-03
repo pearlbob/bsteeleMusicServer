@@ -31,13 +31,24 @@ public class WebSocketServer {
     public void onOpen(final Session session) {
         logger.log(Level.INFO, "onOpen({0}) of {1}", new Object[]{peers.size(), session.getId()});
         peers.add(session);
+/*
+        //  start with the last leader update
+        if (!lastMessage.isEmpty()) {
+            session.getAsyncRemote().sendText(lastMessage);
+        }
+*/
     }
 
     @OnMessage
     public void onMessage(final String message, final Session session) {
-        if (message == null || message.length() <= 0)
+        if (message == null || message.length() == 0)
             return;
 
+        //  look for a time request
+        if (message.equals(timeRequest)) {
+            session.getAsyncRemote().sendText(timeRequest + System.currentTimeMillis());
+            return;
+        }
 
         //   fixme:  flip any message back to all registered peers
         for (final Session peer : peers) {
@@ -72,4 +83,6 @@ public class WebSocketServer {
     static {
         logger.setLevel(Level.FINE);
     }
+
+    private static final String timeRequest = "t:";
 }
