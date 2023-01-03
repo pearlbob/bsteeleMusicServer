@@ -31,12 +31,11 @@ public class WebSocketServer {
     public void onOpen(final Session session) {
         logger.log(Level.INFO, "onOpen({0}) of {1}", new Object[]{peers.size(), session.getId()});
         peers.add(session);
-/*
+
         //  start with the last leader update
-        if (!lastMessage.isEmpty()) {
-            session.getAsyncRemote().sendText(lastMessage);
-        }
-*/
+//        if (!lastMessage.isEmpty()) {
+//            session.getAsyncRemote().sendText(lastMessage);
+//        }
     }
 
     @OnMessage
